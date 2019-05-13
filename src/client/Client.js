@@ -10,14 +10,15 @@ import {createStore, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
 //provide store to connecting components
 import {Provider} from 'react-redux';
+import {renderRoutes} from 'react-router-config';
 import Routes from './Routes';
 import reducers from './reducers';
-
-export const store = createStore(reducers,{},applyMiddleware(thunk))
-ReactDOM.render(
+import deserialize from 'serialize-javascript'
+export const store = createStore(reducers,deserialize(window.INITIAL_STATE),applyMiddleware(thunk))
+ReactDOM.hydrate(
     <Provider store={store}>
     <BrowserRouter>
-        <Routes />
+        <div>{renderRoutes(Routes)}</div>
     </BrowserRouter>
     </Provider>
     ,document.querySelector('#root'))

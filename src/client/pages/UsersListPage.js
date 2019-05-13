@@ -4,16 +4,14 @@ import {fetchUsers} from '../actions';
 
 class UsersList extends  Component{
 
-       constructor(props){
-           super(props);
-           this.renderUsers = this.renderUsers.bind(this);
-       }
+    componentDidMount() {
+        this.props.fetchUsers();
+      }
 
     renderUsers(){
          return this.props.users.map(user =>{
         return  <li key={user.id}>{user.name}</li>;
         });
-      
     }
 
     render(){
@@ -29,5 +27,13 @@ class UsersList extends  Component{
 function mapStateToProps(state){
     return {users:state.users};
 }
+function loadData(store){
+   return store.dispatch(fetchUsers());
+}
 
-export default connect(mapStateToProps,fetchUsers)(UsersList);
+
+export { loadData };
+export default {
+    loadData,
+   component: connect(mapStateToProps,{fetchUsers})(UsersList)
+};
