@@ -14,7 +14,14 @@ import {renderRoutes} from 'react-router-config';
 import Routes from './Routes';
 import reducers from './reducers';
 import deserialize from 'serialize-javascript'
-export const store = createStore(reducers,deserialize(window.INITIAL_STATE),applyMiddleware(thunk))
+import axios from 'axios';
+
+const axiosInstance = axios.create({
+    baseURL:'/api'
+});
+
+
+export const store = createStore(reducers,deserialize(window.INITIAL_STATE),applyMiddleware(thunk.withExtraArgument(axiosInstance)))
 ReactDOM.hydrate(
     <Provider store={store}>
     <BrowserRouter>

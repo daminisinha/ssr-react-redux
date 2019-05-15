@@ -6,19 +6,25 @@ import {renderRoutes} from 'react-router-config';
 import Routes from '../client/Routes';
 //creates a URL encoded text string string by serializing form values for XSS atack
 import serialize  from 'serialize-javascript';
+import { Helmet } from 'react-helmet';
 
+const helmet = Helmet.renderStatic();
 //express routing
-export default (req,store)=>{
+export default (req,store,context)=>{
     const content = renderToString(
       <Provider store={store}>
-        <StaticRouter location={req.path} context={{}}>
+        <StaticRouter location={req.path} context={{context}}>
          <div>{renderRoutes(Routes)}</div>
         </StaticRouter>
       </Provider>
     );
     return `
     <html>
-      <head></head>
+      <head>
+      ${helmet.title.toString()}
+      ${helmet.meta.toString()}
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+      </head>
       <body>
         <div id="root">${content}</div>
         <script>
